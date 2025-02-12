@@ -1,0 +1,134 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Product class to hold product details
+class Product {
+private:
+    string name;
+    float price;
+    int quantity;
+
+public:
+    // Default constructor
+    Product() {
+        name = "";
+        price = 0.0;
+        quantity = 0;
+    }
+
+    // Parameterized constructor to initialize product details
+    Product(string name, float price, int quantity) {
+        this->name = name;
+        this->price = price;
+        this->quantity = quantity;
+    }
+
+    // Copy constructor
+    Product(const Product &other) {
+        name = other.name;
+        price = other.price;
+        quantity = other.quantity;
+    }
+
+    // Getter methods to retrieve product details
+    string getName() {
+        return name;
+    }
+
+    float getPrice() {
+        return price;
+    }
+
+    int getQuantity() {
+        return quantity;
+    }
+
+    // Display product details
+    void displayProduct() {
+        cout << "Product Name: " << name << endl;
+        cout << "Price: $" << price << endl;
+        cout << "Quantity: " << quantity << endl;
+    }
+};
+
+// ShoppingCart class to manage products in the cart
+class ShoppingCart {
+private:
+    Product* cart;        // Array of Product objects
+    int size;             // Number of products in the cart
+    int capacity;         // Maximum capacity of the cart
+
+public:
+    // Constructor to initialize the cart with a given capacity
+    ShoppingCart(int capacity) {
+        this->capacity = capacity;
+        size = 0;
+        cart = new Product[capacity];
+    }
+
+    // Destructor to free up memory
+    ~ShoppingCart() {
+        delete[] cart;
+    }
+
+    // Method to add a product to the cart
+    void addProduct(Product &product) {
+        if (size < capacity) {
+            cart[size++] = product;  // Add product to the cart
+        } else {
+            cout << "Cart is full. Cannot add more products." << endl;
+        }
+    }
+
+    // Method to display all products in the cart
+    void displayCart() {
+        if (size == 0) {
+            cout << "Your cart is empty." << endl;
+        } else {
+            for (int i = 0; i < size; i++) {
+                cout << "Product " << i + 1 << ":" << endl;
+                cart[i].displayProduct();
+                cout << endl;
+            }
+        }
+    }
+
+    // Method to duplicate a product and add it to the cart
+    void duplicateProduct(int index) {
+        if (index >= 0 && index < size) {
+            Product newProduct = cart[index];  // Use copy constructor
+            addProduct(newProduct);            // Add duplicated product to the cart
+            cout << "Product " << index + 1 << " duplicated and added to the cart." << endl;
+        } else {
+            cout << "Invalid product index." << endl;
+        }
+    }
+};
+
+int main() {
+    // Create a shopping cart with a capacity of 5 products
+    ShoppingCart cart(5);
+
+    // Add products to the cart
+    Product product1("Laptop", 1000.00, 2);
+    Product product2("Headphones", 50.00, 1);
+    Product product3("Smartphone", 700.00, 3);
+
+    cart.addProduct(product1);
+    cart.addProduct(product2);
+    cart.addProduct(product3);
+
+    // Display products in the cart
+    cout << "Displaying products in the cart:" << endl;
+    cart.displayCart();
+
+    // Duplicate a product and add it to the cart
+    cart.duplicateProduct(1);
+
+    // Display the updated cart
+    cout << "\nDisplaying updated cart:" << endl;
+    cart.displayCart();
+
+    return 0;
+}
